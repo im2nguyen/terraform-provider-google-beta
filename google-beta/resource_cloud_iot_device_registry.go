@@ -22,8 +22,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func expandCloudIotDeviceRegistryHTTPConfig(v interface{}, d TerraformResourceData, config *Config) (interface{}, error) {
@@ -341,9 +341,10 @@ will also enable ERROR logging. Default value: "NONE" Possible values: ["NONE", 
 If it is not provided, the provider region is used.`,
 			},
 			"state_notification_config": {
-				Type:        schema.TypeMap,
+				Type:        schema.TypeList,
 				Description: `A PubSub topic to publish device state updates.`,
 				Optional:    true,
+				ConfigMode:  schema.SchemaConfigModeAttr,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"pubsub_topic_name": {
@@ -356,10 +357,11 @@ If it is not provided, the provider region is used.`,
 				},
 			},
 			"mqtt_config": {
-				Type:        schema.TypeMap,
+				Type:        schema.TypeList,
 				Description: `Activate or deactivate MQTT.`,
 				Computed:    true,
 				Optional:    true,
+				ConfigMode:  schema.SchemaConfigModeAttr,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"mqtt_enabled_state": {
@@ -373,10 +375,11 @@ If it is not provided, the provider region is used.`,
 				},
 			},
 			"http_config": {
-				Type:        schema.TypeMap,
+				Type:        schema.TypeList,
 				Description: `Activate or deactivate HTTP.`,
 				Computed:    true,
 				Optional:    true,
+				ConfigMode:  schema.SchemaConfigModeAttr,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"http_enabled_state": {
@@ -397,9 +400,10 @@ If it is not provided, the provider region is used.`,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"public_key_certificate": {
-							Type:        schema.TypeMap,
+							Type:        schema.TypeList,
 							Description: `A public key certificate format and data.`,
 							Required:    true,
+							ConfigMode:  schema.SchemaConfigModeAttr,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"format": {
