@@ -58,6 +58,7 @@ type Config struct {
 	Credentials         string
 	AccessToken         string
 	Project             string
+	BillingProject      string
 	Region              string
 	Zone                string
 	Scopes              []string
