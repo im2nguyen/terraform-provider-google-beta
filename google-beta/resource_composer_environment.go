@@ -665,7 +665,6 @@ func resourceComposerEnvironmentUpdate(d *schema.ResourceData, meta interface{})
 			if err != nil {
 				return err
 			}
-			d.SetPartial("config")
 		}
 
 		if d.HasChange("config.0.web_server_config") {
@@ -677,7 +676,6 @@ func resourceComposerEnvironmentUpdate(d *schema.ResourceData, meta interface{})
 			if err != nil {
 				return err
 			}
-			d.SetPartial("config")
 		}
 	}
 

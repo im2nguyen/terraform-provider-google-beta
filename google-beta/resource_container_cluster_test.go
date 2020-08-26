@@ -424,7 +424,7 @@ func TestAccContainerCluster_withInvalidReleaseChannel(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccContainerCluster_withReleaseChannelEnabled(clusterName, "CANARY"),
-				ExpectError: regexp.MustCompile(`config is invalid: expected release_channel\.0\.channel to be one of \[UNSPECIFIED RAPID REGULAR STABLE\], got CANARY`),
+				ExpectError: regexp.MustCompile(`expected release_channel\.0\.channel to be one of \[UNSPECIFIED RAPID REGULAR STABLE\], got CANARY`),
 			},
 		},
 	})
@@ -1954,6 +1954,10 @@ func checkMatch(attributes map[string]string, attr string, gcp interface{}) stri
 }
 
 func checkListMatch(attributes map[string]string, attr string, gcpList []string) string {
+	if attributes[attr+".#"] == "" {
+		attributes[attr+".#"] = "0"
+	}
+
 	num, err := strconv.Atoi(attributes[attr+".#"])
 	if err != nil {
 		return fmt.Sprintf("Error in number conversion for attribute %s: %s", attr, err)
@@ -1972,6 +1976,10 @@ func checkListMatch(attributes map[string]string, attr string, gcpList []string)
 }
 
 func checkMapMatch(attributes map[string]string, attr string, gcpMap map[string]string) string {
+	if attributes[attr+".%"] == "" {
+		attributes[attr+".%"] = "0"
+	}
+
 	num, err := strconv.Atoi(attributes[attr+".%"])
 	if err != nil {
 		return fmt.Sprintf("Error in number conversion for attribute %s: %s", attr, err)
@@ -3494,9 +3502,6 @@ resource "google_container_cluster" "with_ip_allocation_policy" {
 
 func testAccContainerCluster_withResourceUsageExportConfig(clusterName, datasetId, enableMetering string) string {
 	return fmt.Sprintf(`
-provider "google" {
-  user_project_override = true
-}	
 resource "google_bigquery_dataset" "default" {
   dataset_id                 = "%s"
   description                = "gke resource usage dataset tests"
